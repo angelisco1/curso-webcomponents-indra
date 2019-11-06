@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script type="module" src="./components/logo.js"></script>
+    <script type="module" src="./components/boton-color.js"></script>
+    <script type="module" src="./components/contador.js"></script>
+    <script type="module" src="./components/contador2.js"></script>
+    <style>
+        span {
+            color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <wc-contador cuenta="10"></wc-contador>
+    <wc-contador2></wc-contador2>
+    <wc-logo imagen="images/Koala.jpg"></wc-logo>
+    <button is="boton-color">Mi botón</button>
+    <ul id="listaItems">
+
+    </ul>
+
+    <template id="temp1">
+        <li><span id="itemId"></span>: <span id="itemNombre"></span></li>
+    </template>
+
+    <script>
+        const items = [
+            {id: 1, nombre: 'Item 1'},
+            {id: 2, nombre: 'Item 2'},
+            {id: 3, nombre: 'Item 3'}
+        ]
+        const template = document.getElementById('temp1');
+        const listaItems = document.getElementById('listaItems');
+
+        items.forEach((item) => {
+            const li = template.content.cloneNode(true);
+            li.querySelector('#itemId').innerText = item.id;
+            li.querySelector('#itemNombre').innerText = item.nombre;
+            listaItems.appendChild(li);
+        })
+    </script>
+    <script type="module">
+        import Contador from './components/contador.js';
+        // const cont = document.createElement('wc-contador');
+        const cont = new Contador();
+        cont.setAttribute('cuenta', 1)
+        document.body.appendChild(cont);
+    </script>
+    <script type="module">
+        import Contador2 from './components/contador2.js';
+        const cont = new Contador2();
+        console.dir(cont);
+        cont.cuenta = 3;
+        document.body.appendChild(cont);
+    </script>
+</body>
+</html>
