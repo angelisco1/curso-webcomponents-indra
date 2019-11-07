@@ -17,9 +17,8 @@ template.innerHTML = `
 		<label for="filtro">Filtrar por:</label>
 		<input type="text" id="filtro" name="filtro" />
 	</div>
-	<div id="listaConceptos">
-
-	</div>
+	<div id="listaConceptos"></div>
+	<div id="totalConceptos"></div>
 `;
 
 const conceptos = [
@@ -39,9 +38,11 @@ class IngresosGastos extends HTMLElement {
 		_shadowRoot.appendChild(template.content.cloneNode(true));
 
 		this.$listaConceptos = _shadowRoot.querySelector('#listaConceptos');
+		this.$totalConceptos = _shadowRoot.querySelector('#totalConceptos');
 		this.$inputConcepto = _shadowRoot.querySelector('#concepto')
 		this.$inputCantidad = _shadowRoot.querySelector('#cantidad')
 		this.$form = _shadowRoot.querySelector('form');
+		this.$inputFiltro = _shadowRoot.querySelector('#filtro');
 
 		this.conceptos = conceptos;
 		this.nextId = 4;
@@ -49,7 +50,16 @@ class IngresosGastos extends HTMLElement {
 
 	connectedCallback() {
 		this.$form.addEventListener('submit', this.guardarConcepto.bind(this));
+		this.$inputFiltro.addEventListener('input', this.filtrarConceptos.bind(this));
 		this.pintaConceptos(conceptos);
+	}
+
+	filtrarConceptos(event) {
+		const txtFiltro = event.target.value;
+		const conceptosFiltrados = this.conceptos.filter(c => {
+			return c.concepto.toLowerCase().includes(txtFiltro.toLowerCase());
+		})
+		this.pintaConceptos(conceptosFiltrados);
 	}
 
 	guardarConcepto(event) {
@@ -86,8 +96,11 @@ class IngresosGastos extends HTMLElement {
 		// 	c.setAttribute('cantidad', concepto.cantidad);
 		// 	this.$listaConceptos.appendChild(c);
 		// });
+
+		let total = 0;
 		
 		this.$listaConceptos.innerHTML = conceptos.map((c) => {
+			total += c.cantidad;
 			return `<wc-concepto id="${c.id}" concepto="${c.concepto}" cantidad="${c.cantidad}"></wc-concepto>`;
 		}).join('')
 
@@ -98,6 +111,10 @@ class IngresosGastos extends HTMLElement {
 
 		const t1 = window.performance.now();
 		console.log(t1-t0);
+
+		this.$totalConceptos.innerHTML = `
+			<wc-concepto-info concepto="Total:" total="${total}"></wc-concepto-info>
+		`;
 	}
 
 	deleteConcepto(event) {

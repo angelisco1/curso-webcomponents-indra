@@ -9,7 +9,7 @@ template.innerHTML = `
 		}
 	</style>
 	<div id="contenedor">
-		<div id="color"></div>
+		<div id="color">&nbsp;</div>
 		<div id="concepto"></div>
 		<div id="cantidad"></div>
 		<div id="opciones">
@@ -52,7 +52,7 @@ export default class Concepto extends HTMLElement {
 				break;
 			case 'cantidad':
 				this.$cantidad.innerText = newVal + '€';
-				this.$color.style.backgroundColor = newVal < 0 ? 'red' : 'green';
+				this.$color.style.backgroundColor = newVal < 0 ? 'red' : 'yellowgreen';
 				break;
 		}
 	}

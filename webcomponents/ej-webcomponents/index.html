@@ -9,6 +9,7 @@
     <script type="module" src="./components/boton-color.js"></script>
     <script type="module" src="./components/contador.js"></script>
     <script type="module" src="./components/contador2.js"></script>
+    <script type="module" src="./components/card.js"></script>
     <style>
         span {
             color: yellow;
@@ -16,12 +17,23 @@
     </style>
 </head>
 <body>
+    <wc-card>
+        <h2 slot="footer">Lorem ipsum</h2>
+    </wc-card>
+    <wc-card>
+        <img slot="header" width="150px" src="https://images-na.ssl-images-amazon.com/images/I/810lcy2NBuL._SX425_.jpg" />
+        <h2 slot="footer">Lorem ipsum</h2>
+    </wc-card>
+    <wc-card>
+        <img slot="footer" width="150px" src="https://images-na.ssl-images-amazon.com/images/I/810lcy2NBuL._SX425_.jpg" />
+        <h2 slot="header">Lorem ipsum</h2>
+    </wc-card>
     <wc-contador cuenta="10"></wc-contador>
     <wc-contador2></wc-contador2>
     <wc-logo imagen="images/Koala.jpg"></wc-logo>
     <button is="boton-color">Mi botón</button>
     <ul id="listaItems">
-
+        
     </ul>
 
     <template id="temp1">
