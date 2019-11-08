@@ -7,9 +7,16 @@ class DatosHijo extends PolymerElement {
 
 	static get template() {
     return html`
-      <h3>Hijo</h3>
-			<div>
-				<input type="text" name="nombre" value="[[nombre]]" on-input="changeProp" />
+			<h3>Hijo</h3>
+			<a id="href1" href="[[url]]" target="_blank">Ir a Google</a> 
+			<a id="href2" href$="[[url]]" target="_blank">Ir a Google</a>
+			<button type="button" on-click="muestraHref1">Muestra href 1</button>
+			<button type="button" on-click="muestraHref2">Muestra href 2</button>
+			<div class$="aaa">
+				<input type="text" name="url" value="[[url]]"on-change="changeProp" />
+			</div>
+			<div class$="aaa">
+				<input type="text" name="nombre" value="[[nombre]]"on-input="changeProp" />
 			</div>
 			<div>
 				<input type="text" name="apellidos" value="[[apellidos]]" on-input="changeProp" />
@@ -20,9 +27,15 @@ class DatosHijo extends PolymerElement {
 
 	static get properties() {
 		return {
+			url: {
+				type: String,
+				value: 'http://www.google.es'
+			},
 			nombre: {
         type: String,
-        notify: true
+				notify: true,
+				// value: 'Nombre',
+				// readOnly: true
 			},
 			apellidos: {
 				type: String,
@@ -36,6 +49,14 @@ class DatosHijo extends PolymerElement {
 				value: ''
 			}
 		}
+	}
+
+	muestraHref1() {
+		console.log(this.shadowRoot.querySelector('#href1').getAttribute('href'));
+	}
+	
+	muestraHref2() {
+		console.log(this.shadowRoot.querySelector('#href2').getAttribute('href'));
 	}
 
 	getNombreCompleto(nombre, apellidos) {
