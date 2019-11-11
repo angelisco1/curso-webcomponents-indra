@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>ej-cv-interactivo test</title>
+
+    <script src="../../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../../node_modules/@polymer/test-fixture/test-fixture.js"></script>
+    <script src="../../node_modules/mocha/mocha.js"></script>
+    <script src="../../node_modules/chai/chai.js"></script>
+    <script src="../../node_modules/wct-mocha/wct-mocha.js"></script>
+
+    <script type="module" src="../../src/ej-cv-interactivo/ej-cv-interactivo.js"></script>
+  </head>
+  <body>
+
+    <test-fixture id="BasicTestFixture">
+      <template>
+        <ej-cv-interactivo></ej-cv-interactivo>
+      </template>
+    </test-fixture>
+
+    <script type="module">
+      suite('ej-cv-interactivo', function() {
+        var $elemCvInteractivo, elemCvInteractivoShadowRoot, $elemPreviewCv, $elemFormCv;
+
+        // Se ejecuta antes de cada test
+        setup(function() {
+          $elemCvInteractivo = fixture('BasicTestFixture');
+          elemCvInteractivoShadowRoot = $elemCvInteractivo.shadowRoot;
+          $elemPreviewCv = elemCvInteractivoShadowRoot.querySelector('preview-cv');
+          $elemFormCv = elemCvInteractivoShadowRoot.querySelector('form-cv');
+        })
+
+        test('instantiating the element with default properties works', function() {
+          // Comprobamos que el valor de nombre + ' ' + apellido (en form) es igual al de nombreCompleto (en preview)
+          const nombreCompletoForm = $elemFormCv.nombre + ' ' + $elemFormCv.apellidos
+
+          assert.equal(nombreCompletoForm, $elemPreviewCv.nombreCompleto);
+
+          // Comprobamos que las otras propiedades son iguales entre los dos componentes
+          assert.equal($elemFormCv.email, $elemPreviewCv.email);
+          expect($elemFormCv.email).to.be.equal($elemPreviewCv.email);
+
+          assert.equal($elemFormCv.skills.length, $elemPreviewCv.skills.length);
+          expect($elemFormCv.skills).to.have.lengthOf($elemPreviewCv.skills.length);
+        });
+
+        test('si cambia una propiedad en el componente superior, los hijos tienen que obtener el mismo valor', function() {
+          // Cambiamos las propiedades de Nombre y Apellidos
+          $elemCvInteractivo.nombre = 'Charly';
+          $elemCvInteractivo.apellidos = 'Falco';
+
+
+          const nombreCompletoForm = $elemFormCv.nombre + ' ' + $elemFormCv.apellidos
+          console.log('_' + nombreCompletoForm + '_');
+          console.log('_' + $elemPreviewCv.nombreCompleto + '_');
+
+          assert.equal(nombreCompletoForm, $elemPreviewCv.nombreCompleto);
+          expect(nombreCompletoForm).to.be.equal($elemPreviewCv.nombreCompleto);
+
+          $elemCvInteractivo.email = 'c_falco@gmail.com';
+          assert.equal($elemFormCv.email, $elemPreviewCv.email);
+          expect($elemFormCv.email).to.be.equal($elemPreviewCv.email);
+        })
+
+        test('si añadimos una skill en el form debe de aparecer en el preview', function() {
+          // Obtenemos el input con id skill
+          const $elemFormCvShadowRoot = $elemFormCv.shadowRoot;
+          const $inputSkill = $elemFormCvShadowRoot.querySelector('#skill')
+
+          // Añadimos una skill
+          const newSkill = 'Polymer 3';
+          $inputSkill.value = newSkill;
+          $inputSkill.dispatchEvent(new Event('change'));
+
+          // console.log($elemFormCv.skills)
+
+          // Comprobamos que hay una skill y es la que se ha introducido
+          assert.equal($elemPreviewCv.skills.length, 1)
+          assert.equal($elemPreviewCv.skills[0], newSkill);
+
+          // Lo de antes, pero con Chai
+          expect($elemPreviewCv.skills).to.have.lengthOf(1);
+          expect($elemPreviewCv.skills[0]).to.be.equal(newSkill);
+          expect($elemPreviewCv.skills[0]).to.be.a('string');
+        })
+
+
+
+      });
+    </script>
+
+
+  </body>
+</html>
